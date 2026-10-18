@@ -1,0 +1,5 @@
+import {z} from 'zod'
+const text=z.string().trim().min(1).max(2000)
+export const assignmentSchema=z.object({responsibility:z.enum(['coordinate','research','produce','operate','review']),specialities:z.array(text).max(5),reason:text,stopWhen:text,maxTurns:z.number().int().min(1).max(100),delegationReason:text.optional()}).strict()
+export type AssignmentProfile=z.infer<typeof assignmentSchema>
+export function assignmentBrief(p?:AssignmentProfile):string{return p?`ASSIGNMENT RESPONSIBILITY: ${p.responsibility}. Specialities: ${(p.specialities??[]).join(', ')||'General project work'}. Why this work: ${p.reason}. Stop when: ${p.stopWhen}. Turn budget: ${p.maxTurns}. ${p.delegationReason?'Why separate work helps: '+p.delegationReason:''} A responsibility is not permission or proof of expertise. Investigate small evidence gaps with your own tools; escalate a material gap with its evidence and a bounded recommendation. At the limit report uncertainty, not a fabricated completion. Preserve actual output versions and unresolved concerns for the receiving task.`:''}
